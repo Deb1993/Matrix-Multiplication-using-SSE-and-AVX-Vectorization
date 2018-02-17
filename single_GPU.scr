@@ -1,11 +1,11 @@
 #!/bin/bash
-# #SBATCH -D /home/my_user_my_dir/
+# #SBATCH -D /home/dmajumde/pa2-pa2-dmajumde-asg043/logs/deb
 # Job name,  will be displayed on the showq command
 #SBATCH -J MMPY-CUDA
 # Filename for standard output 
 # At end of job, it is in the directory from which sbatch was invoked
-#SBATCH -o MMPY-CUDA.o%j
-#SBATCH -e MMPY-CUDA.e%j
+#SBATCH -o /home/dmajumde/pa2-pa2-dmajumde-asg043/logs/deb/MMPY-CUDA.o%j
+#SBATCH -e /home/dmajumde/pa2-pa2-dmajumde-asg043/logs/deb/MMPY-CUDA.e%j
 #SBATCH --get-user-env
 #SBATCH --ntasks=1
 #SBATCH --gres=gpu:1
