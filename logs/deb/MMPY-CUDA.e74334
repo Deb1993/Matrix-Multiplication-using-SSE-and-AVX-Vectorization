@@ -1,0 +1,8 @@
+Cuda error: Error in matrixMul kernel: an illegal memory access was encountered.
+Cuda error: Error in matrixMul kernel: an illegal memory access was encountered.
+Cuda error: Error in matrixMul kernel: an illegal memory access was encountered.
+Cuda error: Error in matrixMul kernel: an illegal memory access was encountered.
+Cuda error: Error in matrixMul kernel: an illegal memory access was encountered.
+Cuda error: Error in matrixMul kernel: an illegal memory access was encountered.
+Cuda error: Error in matrixMul kernel: an illegal memory access was encountered.
+slurmstepd: *** JOB 74334 CANCELLED AT 2018-02-17T14:20:25 DUE TO TIME LIMIT on compute-0-0 ***

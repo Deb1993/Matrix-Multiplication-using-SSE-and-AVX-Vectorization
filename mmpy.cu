@@ -89,15 +89,18 @@ main(int argc, char** argv) {
 #if (!defined(BLOCKDIM_X) && !defined(BLOCKDIM_Y))
     _ntx = ntx;
     _nty = nty;
+    printf("inside ntx = %d, inside nty = %d\n",_ntx,_nty);
 #else
     _ntx = BLOCKDIM_X;
     _nty = BLOCKDIM_Y;
+    printf("outside ntx = %d, outside nty = %d\n",_ntx,_nty);
 #endif
 
     dim3 threads(_ntx, _nty,1);
     int numblocksX = n/_ntx;
     int numblocksY = n/_nty;
 
+    printf("n: %d, tx: %d, ty: %d, reps: %d, epsilon: %g\n\n", n, threads.x, threads.y, reps, eps);
     if( n % _ntx != 0  )
         numblocksX++;
 
@@ -106,6 +109,7 @@ main(int argc, char** argv) {
  
     dim3 grid(numblocksX, numblocksY, 1);
 
+    printf("n: %d, tx: %d, ty: %d, gridX: %d, gridY: %d, reps: %d, epsilon: %g\n\n", n, threads.x, threads.y, grid.x, grid.y, reps, eps);
     setGrid(n, threads, grid);
 
     // print configurations
