@@ -5,23 +5,25 @@
 #include "utils.h"
 #include "types.h"
 using namespace std;
+#define TW 32 
 
 __global__ void matMul(int N, _DOUBLE_ *C, _DOUBLE_ *A, _DOUBLE_ *B) {
 
-//    int I =  blockIdx.y*blockDim.y + threadIdx.y;
-//    int J =  blockIdx.x*blockDim.x + threadIdx.x;
-//
-//    if((I < N) && (J < N)){
-//        _DOUBLE_ _c = 0;
-//        for (unsigned int k = 0; k < N; k++) {
-//            _DOUBLE_ a = A[I * N + k];
-//            _DOUBLE_ b = B[k * N + J];
-//            _c += a * b;
-//        }
-//        C[I * N + J] = _c;
-//    }
-#define TW 32 
+if(N%TW != 0) {
+    int I =  blockIdx.y*blockDim.y + threadIdx.y;
+    int J =  blockIdx.x*blockDim.x + threadIdx.x;
 
+    if((I < N) && (J < N)){
+        _DOUBLE_ _c = 0;
+        for (unsigned int k = 0; k < N; k++) {
+            _DOUBLE_ a = A[I * N + k];
+            _DOUBLE_ b = B[k * N + J];
+            _c += a * b;
+        }
+        C[I * N + J] = _c;
+    }
+}
+else {
 __shared__ double AS[TW][TW], BS[TW][TW];
 
 int ty = threadIdx.y;
@@ -48,4 +50,5 @@ if( (I < N) && (J < N)) {
 		}
 	C[I*N + J] = Cij;
 	}
+}
 }
