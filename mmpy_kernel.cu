@@ -57,14 +57,14 @@ __global__ void matMul(int N, _DOUBLE_ *C, _DOUBLE_ *A, _DOUBLE_ *B) {
 			#pragma unroll
 			for (int k=0; k<min(TW,N-kk*TW); k++)
 			{
-				Cij+= As[ty][k] * Bs[k][tx];
-				Cij_4+= As[ty+4][k] * Bs[k][tx];
-				Cij_8+= As[ty+8][k] * Bs[k][tx];
-				Cij_12+= As[ty+12][k] * Bs[k][tx];
-				Cij_16+= As[ty+16][k] * Bs[k][tx];
-				Cij_20+= As[ty+20][k] * Bs[k][tx];
-				Cij_24+= As[ty+24][k] * Bs[k][tx];
-				Cij_28+= As[ty+28][k] * Bs[k][tx];
+				Cij += As[ty][k] * Bs[k][tx];
+				Cij_4 += As[ty+4][k] * Bs[k][tx];
+				Cij_8 += As[ty+8][k] * Bs[k][tx];
+				Cij_12 += As[ty+12][k] * Bs[k][tx];
+				Cij_16 += As[ty+16][k] * Bs[k][tx];
+				Cij_20 += As[ty+20][k] * Bs[k][tx];
+				Cij_24 += As[ty+24][k] * Bs[k][tx];
+				Cij_28 += As[ty+28][k] * Bs[k][tx];
 			}
 		__syncthreads();
 	}
@@ -111,14 +111,14 @@ else
 			#pragma unroll
 			for (int k=0; k<TW; k++)
 			{
-				Cij+= As[ty][k] * Bs[k][tx];
-				Cij_4+= As[ty+4][k] * Bs[k][tx];
-				Cij_8+= As[ty+8][k] * Bs[k][tx];
-				Cij_12+= As[ty+12][k] * Bs[k][tx];
-				Cij_16+= As[ty+16][k] * Bs[k][tx];
-				Cij_20+= As[ty+20][k] * Bs[k][tx];
-				Cij_24+= As[ty+24][k] * Bs[k][tx];
-				Cij_28+= As[ty+28][k] * Bs[k][tx];
+				Cij += As[ty][k] * Bs[k][tx];
+				Cij_4 += As[ty+4][k] * Bs[k][tx];
+				Cij_8 += As[ty+8][k] * Bs[k][tx];
+				Cij_12 += As[ty+12][k] * Bs[k][tx];
+				Cij_16 += As[ty+16][k] * Bs[k][tx];
+				Cij_20 += As[ty+20][k] * Bs[k][tx];
+				Cij_24 += As[ty+24][k] * Bs[k][tx];
+				Cij_28 += As[ty+28][k] * Bs[k][tx];
 			}
 		__syncthreads();
 		}
