@@ -82,7 +82,7 @@ else
 	int I = by*TW + ty; 
 	int J = bx*TW + tx;
 //	for (int kk=0; kk<ceilf(float (N)/TW); kk++)
-	if(I < N && J < N) { 
+	if((I < N) && (J < N)) { 
 	#pragma unroll
 	for (int kk=0; kk<N/TW; kk++)
 	{
