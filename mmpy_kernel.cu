@@ -11,43 +11,112 @@ __global__ void matMul(int N, _DOUBLE_ *C, _DOUBLE_ *A, _DOUBLE_ *B) {
 	int ty = threadIdx.y, tx = threadIdx.x;
 	int by = blockIdx.y, bx = blockIdx.x;
 	double Cij = 0;
+	double Cij_04 = 0;
+	double Cij_08 = 0;
+	double Cij_12 = 0;
+	double Cij_16 = 0;
+	double Cij_20 = 0;
+	double Cij_24 = 0;
+	double Cij_28 = 0;
 	if(N%TW)
-{
-	int I = min(N-1,by*TW + ty); 
-	int J= min(N-1,bx*TW + tx);
-//	for (int kk=0; kk<ceilf(float (N)/TW); kk++)
-	for (int kk=0; kk<(N/TW + int(bool(N%TW))); kk++)
 	{
-		As[ty][tx] = A[I*N + kk*TW+tx];
-		Bs[ty][tx] = B[(kk*TW+ty)*N + J];
-		__syncthreads();
-			//for (int k=0; k<TW && k+kk*TW<N; k++)
-			for (int k=0; k<min(TW,N-kk*TW); k++)
+		int I = min(N-1,by*TW + ty); 
+		int J= min(N-1,bx*TW + tx);
+		//	for (int kk=0; kk<ceilf(float (N)/TW); kk++)
+		//for (int kk=0; kk<(N/TW + int(bool(N%TW))); kk++)
+		if((I < N) && (J < N)){
+			for (int kk=0; kk<(N/TW + 1); kk++)
 			{
-				Cij+= As[ty][k] * Bs[k][tx];
+				As[ty][tx] = A[I*N + kk*TW+tx];
+				As[ty+4][tx] = A[(I+4)*N + kk*TW+tx];
+				As[ty+8][tx] = A[(I+8)*N + kk*TW+tx];
+				As[ty+12][tx] = A[(I+12)*N + kk*TW+tx];
+				As[ty+16][tx] = A[(I+16)*N + kk*TW+tx];
+				As[ty+20][tx] = A[(I+20)*N + kk*TW+tx];
+				As[ty+24][tx] = A[(I+24)*N + kk*TW+tx];
+				As[ty+28][tx] = A[(I+28)*N + kk*TW+tx];
+				Bs[ty][tx] = B[(kk*TW+ty)*N + J];
+				Bs[ty+4][tx] = B[(kk*TW+ty+4)*N + J];
+				Bs[ty+8][tx] = B[(kk*TW+ty+8)*N + J];
+				Bs[ty+12][tx] = B[(kk*TW+ty+12)*N + J];
+				Bs[ty+16][tx] = B[(kk*TW+ty+16)*N + J];
+				Bs[ty+20][tx] = B[(kk*TW+ty+20)*N + J];
+				Bs[ty+24][tx] = B[(kk*TW+ty+24)*N + J];
+				Bs[ty+28][tx] = B[(kk*TW+ty+28)*N + J];
+				__syncthreads();
+				//for (int k=0; k<TW && k+kk*TW<N; k++)
+				for (int k=0; k<min(TW,N-kk*TW); k++)
+				{
+					Cij    += As[ty][k] * Bs[k][tx];
+					Cij_04 += As[ty+4][k] * Bs[k][tx];
+					Cij_08 += As[ty+8][k] * Bs[k][tx];
+					Cij_12 += As[ty+12][k] * Bs[k][tx];
+					Cij_16 += As[ty+16][k] * Bs[k][tx];
+					Cij_20 += As[ty+20][k] * Bs[k][tx];
+					Cij_24 += As[ty+24][k] * Bs[k][tx];
+					Cij_28 += As[ty+28][k] * Bs[k][tx];
+				}
+				__syncthreads();
 			}
-		__syncthreads();
+			C[I*N + J]      = Cij;
+			C[(I+4)*N + J]  = Cij_04;
+			C[(I+8)*N + J]  = Cij_08;
+			C[(I+12)*N + J] = Cij_12;
+			C[(I+16)*N + J] = Cij_16;
+			C[(I+20)*N + J] = Cij_20;
+			C[(I+24)*N + J] = Cij_24;
+			C[(I+28)*N + J] = Cij_28;
+		}
 	}
-		C[I*N + J] = Cij;
-}
-else
-{
-	int I = by*TW + ty; 
-	int J= bx*TW + tx;
-//	for (int kk=0; kk<ceilf(float (N)/TW); kk++)
-	for (int kk=0; kk<N/TW; kk++)
+	else
 	{
-		As[ty][tx] = A[I*N + kk*TW+tx];
-		Bs[ty][tx] = B[(kk*TW+ty)*N + J];
-		__syncthreads();
-			//for (int k=0; k<TW && k+kk*TW<N; k++)
-			for (int k=0; k<TW; k++)
-			{
-				Cij+= As[ty][k] * Bs[k][tx];
-			}
-		__syncthreads();
-	}
-		C[I*N + J] = Cij;
+		int I = by*TW + ty; 
+		int J = bx*TW + tx;
+		//	for (int kk=0; kk<ceilf(float (N)/TW); kk++)
 
-}
+		if((I < N) && (J < N)){
+			for (int kk=0; kk<N/TW; kk++)
+			{
+				As[ty][tx]    = A[I*N + kk*TW+tx];
+				As[ty+4][tx]  = A[(I+4)*N + kk*TW+tx];
+				As[ty+8][tx]  = A[(I+8)*N + kk*TW+tx];
+				As[ty+12][tx] = A[(I+12)*N + kk*TW+tx];
+				As[ty+16][tx] = A[(I+16)*N + kk*TW+tx];
+				As[ty+20][tx] = A[(I+20)*N + kk*TW+tx];
+				As[ty+24][tx] = A[(I+24)*N + kk*TW+tx];
+				As[ty+28][tx] = A[(I+28)*N + kk*TW+tx];
+				Bs[ty][tx]    = B[(kk*TW+ty)*N + J];
+				Bs[ty+4][tx]  = B[(kk*TW+ty+4)*N + J];
+				Bs[ty+8][tx]  = B[(kk*TW+ty+8)*N + J];
+				Bs[ty+12][tx] = B[(kk*TW+ty+12)*N + J];
+				Bs[ty+16][tx] = B[(kk*TW+ty+16)*N + J];
+				Bs[ty+20][tx] = B[(kk*TW+ty+20)*N + J];
+				Bs[ty+24][tx] = B[(kk*TW+ty+24)*N + J];
+				Bs[ty+28][tx] = B[(kk*TW+ty+28)*N + J];
+				__syncthreads();
+				//for (int k=0; k<TW && k+kk*TW<N; k++)
+				for (int k=0; k<TW; k++)
+				{
+					Cij    += As[ty][k] * Bs[k][tx];
+					Cij_04 += As[ty+4][k] * Bs[k][tx];
+					Cij_08 += As[ty+8][k] * Bs[k][tx];
+					Cij_12 += As[ty+12][k] * Bs[k][tx];
+					Cij_16 += As[ty+16][k] * Bs[k][tx];
+					Cij_20 += As[ty+20][k] * Bs[k][tx];
+					Cij_24 += As[ty+24][k] * Bs[k][tx];
+					Cij_28 += As[ty+28][k] * Bs[k][tx];
+				}
+				__syncthreads();
+			}
+			C[I*N + J]      = Cij;
+			C[(I+4)*N + J]  = Cij_04;
+			C[(I+8)*N + J]  = Cij_08;
+			C[(I+12)*N + J] = Cij_12;
+			C[(I+16)*N + J] = Cij_16;
+			C[(I+20)*N + J] = Cij_20;
+			C[(I+24)*N + J] = Cij_24;
+			C[(I+28)*N + J] = Cij_28;
+
+		}
+	}
 }
