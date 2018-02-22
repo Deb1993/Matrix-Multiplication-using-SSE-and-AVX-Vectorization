@@ -86,26 +86,26 @@ else
 	#pragma unroll
 	for (int kk=0; kk<N/TW; kk++)
 	{
-		As[ty][tx] = A[I*N + kk*TW + tx];
-		Bs[ty][tx] = B[(kk*TW+ty)*N + J];
-		As[ty+4][tx] = A[(I+4)*N + kk*TW + tx];
-		Bs[ty+4][tx] = B[(kk*TW+ty+4)*N + J];
+		As[ty][tx] = __ldg(&A[I*N + kk*TW + tx]);
+		Bs[ty][tx] = __ldg(&B[(kk*TW+ty)*N + J]);
+		As[ty+4][tx] = __ldg(&A[(I+4)*N + kk*TW + tx]);
+		Bs[ty+4][tx] = __ldg(&B[(kk*TW+ty+4)*N + J]);
 		//printf("As = %f A = %f\n",As[ty][tx],A[I*N+kk*TWx+tx]); 
 		//printf("ty = %d\n",ty);
-		As[ty+8][tx] = A[(I+8)*N + kk*TW+tx];
-		Bs[ty+8][tx] = B[(kk*TW+ty+8)*N + J];
-		As[ty+12][tx] = A[(I+12)*N + kk*TW+tx];
-		Bs[ty+12][tx] = B[(kk*TW+ty+12)*N + J];
+		As[ty+8][tx] = __ldg(&A[(I+8)*N + kk*TW+tx]);
+		Bs[ty+8][tx] = __ldg(&B[(kk*TW+ty+8)*N + J]);
+		As[ty+12][tx] = __ldg(&A[(I+12)*N + kk*TW+tx]);
+		Bs[ty+12][tx] = __ldg(&B[(kk*TW+ty+12)*N + J]);
 		//printf("ty_8\n");
-		As[ty+16][tx] = A[(I+16)*N + kk*TW+tx];
-		Bs[ty+16][tx] = B[(kk*TW+ty+16)*N + J];
-		As[ty+20][tx] = A[(I+20)*N + kk*TW+tx];
-		Bs[ty+20][tx] = B[(kk*TW+ty+20)*N + J];
+		As[ty+16][tx] = __ldg(&A[(I+16)*N + kk*TW+tx]);
+		Bs[ty+16][tx] = __ldg(&B[(kk*TW+ty+16)*N + J]);
+		As[ty+20][tx] = __ldg(&A[(I+20)*N + kk*TW+tx]);
+		Bs[ty+20][tx] = __ldg(&B[(kk*TW+ty+20)*N + J]);
 		//printf("ty_16\n");
-		As[ty+24][tx] = A[(I+24)*N + kk*TW+tx];
-		Bs[ty+24][tx] = B[(kk*TW+ty+24)*N + J];
-		As[ty+28][tx] = A[(I+28)*N + kk*TW+tx];
-		Bs[ty+28][tx] = B[(kk*TW+ty+28)*N + J];
+		As[ty+24][tx] = __ldg(&A[(I+24)*N + kk*TW+tx]);
+		Bs[ty+24][tx] = __ldg(&B[(kk*TW+ty+24)*N + J]);
+		As[ty+28][tx] = __ldg(&A[(I+28)*N + kk*TW+tx]);
+		Bs[ty+28][tx] = __ldg(&B[(kk*TW+ty+28)*N + J]);
 		__syncthreads();
 			//for (int k=0; k<TW && k+kk*TW<N; k++)
 			#pragma unroll
