@@ -28,29 +28,30 @@ __global__ void matMul(int N, _DOUBLE_ *C, _DOUBLE_ *A, _DOUBLE_ *B) {
 
 	
 //	for (int kk=0; kk<ceilf(float (N)/TW); kk++)
+	if((I < N) && (J < N)) {
 	#pragma unroll
-	for (int kk=0; kk<(N/TW + int(bool(N%TW))); kk++)
+	for (int kk=0; kk<(N/TW + 1); kk++)
 	{
-		As[ty][tx] = A[I*N + kk*TW + tx];
-		Bs[ty][tx] = B[(kk*TW+ty)*N + J];
-		As[ty+4][tx] = A[(I+4)*N + kk*TW + tx];
-		Bs[ty+4][tx] = B[(kk*TW+ty+4)*N + J];
-		//printf("As = %f A = %f\n",As[ty][tx],A[I*N+kk*TWx+tx]); 
-		//printf("ty = %d\n",ty);
-		As[ty+8][tx] = A[(I+8)*N + kk*TW+tx];
-		Bs[ty+8][tx] = B[(kk*TW+ty+8)*N + J];
-		As[ty+12][tx] = A[(I+12)*N + kk*TW+tx];
-		Bs[ty+12][tx] = B[(kk*TW+ty+12)*N + J];
-		//printf("ty_8\n");
-		As[ty+16][tx] = A[(I+16)*N + kk*TW+tx];
-		Bs[ty+16][tx] = B[(kk*TW+ty+16)*N + J];
-		As[ty+20][tx] = A[(I+20)*N + kk*TW+tx];
-		Bs[ty+20][tx] = B[(kk*TW+ty+20)*N + J];
-		//printf("ty_16\n");
-		As[ty+24][tx] = A[(I+24)*N + kk*TW+tx];
-		Bs[ty+24][tx] = B[(kk*TW+ty+24)*N + J];
-		As[ty+28][tx] = A[(I+28)*N + kk*TW+tx];
-		Bs[ty+28][tx] = B[(kk*TW+ty+28)*N + J];
+		As[ty][tx] = __ldg(&A[I*N + kk*TW + tx]);
+		Bs[ty][tx] = __ldg(&B[(kk*TW+ty)*N + J]);
+		//As[ty+4][tx] = __ldg(&A[(I+4)*N + kk*TW + tx]);
+		//Bs[ty+4][tx] = __ldg(&B[(kk*TW+ty+4)*N + J]);
+		////printf("As = %f A = %f\n",As[ty][tx],A[I*N+kk*TWx+tx]); 
+		////printf("ty = %d\n",ty);
+		//As[ty+8][tx] = __ldg(&A[(I+8)*N + kk*TW+tx]);
+		//Bs[ty+8][tx] = __ldg(&B[(kk*TW+ty+8)*N + J]);
+		//As[ty+12][tx] = __ldg(&A[(I+12)*N + kk*TW+tx]);
+		//Bs[ty+12][tx] = __ldg(&B[(kk*TW+ty+12)*N + J]);
+		////printf("ty_8\n");
+		//As[ty+16][tx] = __ldg(&A[(I+16)*N + kk*TW+tx]);
+		//Bs[ty+16][tx] = __ldg(&B[(kk*TW+ty+16)*N + J]);
+		//As[ty+20][tx] = __ldg(&A[(I+20)*N + kk*TW+tx]);
+		//Bs[ty+20][tx] = __ldg(&B[(kk*TW+ty+20)*N + J]);
+		////printf("ty_16\n");
+		//As[ty+24][tx] = __ldg(&A[(I+24)*N + kk*TW+tx]);
+		//Bs[ty+24][tx] = __ldg(&B[(kk*TW+ty+24)*N + J]);
+		//As[ty+28][tx] = __ldg(&A[(I+28)*N + kk*TW+tx]);
+		//Bs[ty+28][tx] = __ldg(&B[(kk*TW+ty+28)*N + J]);
 		//printf("ty_24\n");
 		__syncthreads();
 			//for (int k=0; k<TW && k+kk*TW<N; k++)
@@ -58,24 +59,25 @@ __global__ void matMul(int N, _DOUBLE_ *C, _DOUBLE_ *A, _DOUBLE_ *B) {
 			for (int k=0; k<min(TW,N-kk*TW); k++)
 			{
 				Cij += As[ty][k] * Bs[k][tx];
-				Cij_4 += As[ty+4][k] * Bs[k][tx];
-				Cij_8 += As[ty+8][k] * Bs[k][tx];
-				Cij_12 += As[ty+12][k] * Bs[k][tx];
-				Cij_16 += As[ty+16][k] * Bs[k][tx];
-				Cij_20 += As[ty+20][k] * Bs[k][tx];
-				Cij_24 += As[ty+24][k] * Bs[k][tx];
-				Cij_28 += As[ty+28][k] * Bs[k][tx];
+				//Cij_4 += As[ty+4][k] * Bs[k][tx];
+				//Cij_8 += As[ty+8][k] * Bs[k][tx];
+				//Cij_12 += As[ty+12][k] * Bs[k][tx];
+				//Cij_16 += As[ty+16][k] * Bs[k][tx];
+				//Cij_20 += As[ty+20][k] * Bs[k][tx];
+				//Cij_24 += As[ty+24][k] * Bs[k][tx];
+				//Cij_28 += As[ty+28][k] * Bs[k][tx];
 			}
 		__syncthreads();
 	}
 		C[I*N + J] = Cij;
-		C[(I+4)*N + J] = Cij_4;
-		C[(I+8)*N + J] = Cij_8;
-		C[(I+12)*N + J] = Cij_12;
-		C[(I+16)*N + J] = Cij_16;
-		C[(I+20)*N + J] = Cij_20;
-		C[(I+24)*N + J] = Cij_24;
-		C[(I+28)*N + J] = Cij_28;
+		//C[(I+4)*N + J] = Cij_4;
+		//C[(I+8)*N + J] = Cij_8;
+		//C[(I+12)*N + J] = Cij_12;
+		//C[(I+16)*N + J] = Cij_16;
+		//C[(I+20)*N + J] = Cij_20;
+		//C[(I+24)*N + J] = Cij_24;
+		//C[(I+28)*N + J] = Cij_28;
+	}
 }
 else
 {

@@ -1,6 +1,10 @@
+#define TW 32
+
 void setGrid(int n, dim3 &blockDim, dim3 &gridDim)
 {
    // set your block dimensions and grid dimensions here
+   blockDim.y = (n%TW) ? blockDim.x : blockDim.y;
+   
    gridDim.x = n / blockDim.x;
    gridDim.y = n / blockDim.y;
    //gridDim.x = 24;
