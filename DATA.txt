@@ -1,0 +1,88 @@
+Performance of Naive
+256: 87.999980 gflops
+512: 92.436610 gflops
+1024: 93.090393 gflops
+2048: 91.308042 gflops
+Performance after Tiling
+256: 238.752589 gflops
+512: 256.547535 gflops
+1024: 260.630861 gflops
+2048: 263.371557 gflops
+Performance after Unrolling
+Unrolling 2
+256: 304.376245 gflops
+512: 327.751907 gflops
+1024: 326.357850 gflops
+2048: 327.358191 gflops
+Unrolling 4
+256: 351.246602 gflops
+512: 377.801012 gflops
+1024: 374.892898 gflops
+2048: 372.777180 gflops
+Unrolling 8
+256: 350.101964 gflops
+512: 397.294174 gflops
+1024: 385.726642 gflops
+2048: 371.290457 gflops
+Performance after unrolling and coalescing
+Unrolling 2
+256: 305.539248 gflops
+512: 329.598886 gflops
+1024: 328.939389 gflops
+2048: 332.259750 gflops
+Unrolling 4
+256: 347.311308 gflops
+512: 372.781211 gflops
+1024: 375.068989 gflops
+2048: 372.390782 gflops
+Unrolling 8
+256: 345.741385 gflops
+512: 386.466268 gflops
+1024: 387.868358 gflops
+2048: 392.768277 gflops
+Performance for different block sizes
+32x4
+256: 398.170906 gflops
+512: 435.100131 gflops
+1024: 444.764602 gflops
+2048: 434.138225 gflops
+16x2
+256: 245.911286 gflops
+512: 351.359504 gflops
+1024: 331.081911 gflops
+2048: 301.578506 gflops gflops
+24x3
+256: 175.330121 gflops
+512: 188.377120 gflops
+1024: 189.193448 gflops
+2048: 185.659234 gflops
+8x1
+256: 73.190989 gflops
+512: 68.825757 gflops
+1024: 67.643885 gflops
+2048: 66.536154 gflops
+Performance for Various Input Sizes
+31: 7.309302 gflops
+32: 6.666939 gflops
+33: 7.645483 gflops
+63: 41.096126 gflops
+64: 33.137783 gflops
+65: 40.359521 gflops
+127: 133.835050 gflops
+128: 138.053724 gflops
+129: 130.226587 gflops
+255: 229.942727 gflops
+256: 398.170906 gflops
+257: 187.886058 gflops
+511: 272.001408 gflops
+512: 435.100131 gflops
+513: 237.120714 gflops
+767: 266.639998 gflops
+768: 439.748665 gflops
+769: 243.314821 gflops
+1023: 252.759458 gflops
+1024: 444.764602 gflops
+1025: 236.613462 gflops
+2047: 243.812981 gflops
+2048: 434.138225 gflops
+2049: 234.616465 gflops
